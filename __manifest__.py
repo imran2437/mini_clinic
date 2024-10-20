@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Smart Health",
+    'name': "Mini Clinic",
 
     'summary': "Medical Center Management System",
 
@@ -8,13 +8,13 @@
         Medical Center Management System
     """,
 
-    'author': "dsl",
+    'author': "Imran Chowdhury",
     'website': "https://www.yourcompany.com",
 
     'category': 'education',
     'version': '0.1',
 
-    'depends': ['base','smartedu_core','smartedu_student','hr','product','sale_management','account','mail','contacts','web','portal','website','website_sale'],
+    'depends': ['base','hr','product','sale_management','account','mail','contacts','web','portal','website','website_sale'],
 
     'data': [
         ## Data
@@ -75,7 +75,7 @@
     'auto_install': False,
     'application': True,
     'contributors': [
-        "Rasel ali-Jeshad Khan-Imran Chowdhury",
+        "Imran Chowdhury",
     ],
     
 }
