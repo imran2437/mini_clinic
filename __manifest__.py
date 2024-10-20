@@ -14,7 +14,7 @@
     'category': 'education',
     'version': '0.1',
 
-    'depends': ['base','hr','product','sale_management','account','mail','contacts','web','portal','website','website_sale'],
+    'depends': ['base','hr','product','hospital_core','sale_management','account','mail','contacts','web','portal','website','website_sale'],
 
     'data': [
         ## Data
