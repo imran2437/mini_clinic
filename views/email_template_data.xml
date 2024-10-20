@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+        <record id="email_template_prescription_order" model="mail.template">
+            <field name="name">Prescription Email</field>
+            <field name="email_from">{{ user.email_formatted }}</field>
+            <field name="email_to">{{ object.patient_id.email }}</field>
+            <field name="subject">Prescription Details for {{ object.patient_id.name }}</field>
+            <field name="model_id" ref="mini_clinic.model_se_prescription_order"/>
+            <field name="report_template" ref="mini_clinic.report_prescription_order_pdf"/>
+            <field name="lang">{{ object.patient_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <![CDATA[
+                <div>
+                    <p>Hello <t t-esc="object.patient_id.name"/>,</p>
+                    <p>Attached is your prescription. Please find the details below:</p>
+                    <ul>
+                        <li><strong>Prescription ID:</strong> <t t-esc="object.name"/></li>
+                        <li><strong>Doctor:</strong> <t t-esc="object.doctor_id.name"/></li>
+                        <li><strong>Date:</strong> <t t-esc="object.prescription_date"/></li>
+                    </ul>
+                    <p>For more details, please see the attached PDF.</p>
+                    <p>Thank you,</p>
+                    <p>Your Clinic Team</p>
+                </div>
+                ]]>
+            </field>
+        </record>
+        
+
+</odoo>

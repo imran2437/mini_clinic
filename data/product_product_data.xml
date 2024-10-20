@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model="product.product" id="product_product_health_appointment_fees_product">
+            <field name="name">Health Appointment Fees</field>
+            <field name="list_price" eval="1"/>
+            <field name="active">TRUE</field>
+            <field name="sale_ok">TRUE</field>
+            <field name="purchase_ok">FALSE</field>
+            <field name="detailed_type">service</field>
+        </record>
+    </data>
+</odoo>

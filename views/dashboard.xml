@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data><!-- Kanban View for Dashboard -->
+        <record id="view_dashboard_kanban" model="ir.ui.view">
+            <field name="name">se.health.dashboard.kanban</field>
+            <field name="model">se.health.dashboard</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_dashboard o_account_kanban o_kanban_ungrouped se_health_kanban" create="false" edit="false">
+                    <field name="name"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            
+                                <div class="container">
+                                    <div t-attf-class="oe_kanban_card oe_kanban_global_click" style="width: 100% !important; padding: 10px; background-color: #f5f5f5; border-radius: 15px;margin: 0; max-width: none;"><!-- Title -->
+                                        
+                                        <div class="row mb-4 text-center">
+                                            <div class="col-12">
+                                                <h1 style="font-weight: bold; color: #3b3b3b;">Health Dashboard</h1>
+                                            </div>
+                                        </div><!-- Dashboard Cards -->
+                                        <div class="d-flex flex-wrap justify-content-around">
+                                            <div class="card text-center mb-4" style="background-color: #b33939; color: #fff; flex: 0 0 48%; border-radius: 15px;">
+                                                <div class="card-body">
+                                                    <h2 class="card-title">Today&apos;s Appointment</h2>
+                                                    <p class="card-text" style="font-weight: bold; font-size: x-large;">
+                                                        <field name="appoinement_today"/>
+                                                    </p>
+                                                    <div class="text-center">
+                                                        <button type="object" class="btn btn-primary btn-sm" name="action_view_appointments_today">View </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card text-center mb-4" style="background-color: #e58e26; color: #fff; flex: 0 0 48%; border-radius: 15px;">
+                                                <div class="card-body">
+                                                    <h2 class="card-title">Total Appointments</h2>
+                                                    <p class="card-text" style="font-weight: bold; font-size: x-large;">
+                                                        <field name="total_appointments"/>
+                                                    </p>
+                                                    <div class="text-center">
+                                                        <button type="object" class="btn btn-primary btn-sm" name="action_view_appointments">View </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card text-center mb-4" style="background-color: #218c74; color: #fff; flex: 0 0 48%; border-radius: 15px;">
+                                                <div class="card-body">
+                                                    <h2 class="card-title">Doctors</h2>
+                                                    <p class="card-text" style="font-weight: bold; font-size: x-large;">
+                                                        <field name="total_doctors"/>
+                                                    </p>
+                                                    <div class="text-center">
+                                                        <button type="object" class="btn btn-primary btn-sm" name="action_view_doctors">View</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card text-center mb-4" style="background-color: #2c3e50; color: #fff; flex: 0 0 48%; border-radius: 15px;">
+                                                <div class="card-body">
+                                                    <h2 class="card-title">Patients</h2>
+                                                    <p class="card-text" style="font-weight: bold; font-size: x-large;">
+                                                        <field name="total_patients"/>
+                                                    </p>
+                                                    <div class="text-center">
+                                                        <button type="object" class="btn btn-primary btn-sm" name="action_view_patients">View</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card text-center mb-4" t-if="record.referred_draft_appointments.raw_value &gt; 0" style="background-color: #8e44ad; color: #fff; flex: 0 0 48%; border-radius: 15px;">
+                                                <div class="card-body">
+                                                    <h2 class="card-title">My Referred Draft Appointments</h2>
+                                                    <p class="card-text" style="font-weight: bold; font-size: x-large;">
+                                                        <field name="referred_draft_appointments"/>
+                                                    </p>
+                                                    <div class="text-center">
+                                                        <button type="object" class="btn btn-primary btn-sm" name="action_view_referred_draft_appointments">View</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- Health Quote -->
+                                        <div class="row mt-4">
+                                            <div class="col-12 text-center">
+                                                <p style="font-style: italic; color: #7f8c8d;">&quot;Good health is not something we can buy. However, it can be an extremely valuable savings account.&quot; - Anne Wilson Schaef</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record><!-- Action to Open the Dashboard -->
+        <record id="action_dashboard" model="ir.actions.act_window">
+            <field name="name">Dashboard</field>
+            <field name="res_model">se.health.dashboard</field>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="view_dashboard_kanban"/>
+            <field name="target">inline</field>
+        </record><!-- Create a Default Dashboard Record -->
+        <record id="dashboard_default" model="se.health.dashboard">
+            <field name="name">Main Dashboard</field>
+        </record>
+    </data>
+</odoo>

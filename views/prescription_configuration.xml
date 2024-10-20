@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    
+    <!-- Prescription Suggestions Action -->
+    <record id="action_prescription_suggestions" model="ir.actions.act_window">
+      <field name="name">Prescription Suggestions</field>
+      <field name="res_model">se.prescription.suggestions</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Create the first prescription suggestion
+      </p>
+      </field>
+    </record>
+    
+    <!-- Prescription Diagnosis Action -->
+    <record id="action_prescription_diagnosis" model="ir.actions.act_window">
+      <field name="name">Prescription Diagnosis</field>
+      <field name="res_model">se.prescription.diagnosis</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Create the first prescription diagnosis
+      </p>
+      </field>
+    </record>
+    
+    <!-- Prescription Plan Action -->
+    <record id="action_prescription_plan" model="ir.actions.act_window">
+      <field name="name">Prescription Plans</field>
+      <field name="res_model">se.prescription.plan</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Create the first prescription plan
+      </p>
+      </field>
+    </record>
+    <!--action for  lab test  -->
+    <record id="action_prescription_lab_test" model="ir.actions.act_window">
+      <field name="name">Prescription Lab Test</field>
+      <field name="res_model">se.prescription.lab.test</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Create the first prescription lab test
+      </p>
+      </field>
+    </record>
+    <!-- action for se.health.doc.departments -->
+    <record id="action_se_health_doc_departments" model="ir.actions.act_window">
+      <field name="name">Departments</field>
+      <field name="res_model">se.health.doc.departments</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Create the first department
+      </p>
+      </field>
+    </record>
+  </data>
+</odoo>

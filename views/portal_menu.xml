@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    
+    <!-- Extend the portal home page to add a new Health section -->
+    <template id="mini_clinic_portal_my_home_dashboard" inherit_id="portal.portal_my_home">
+        <xpath expr="//*[hasclass('oe_structure')]" position="after">
+            <div class="row g-2 mt-1">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="icon" t-value="'/mini_clinic/static/description/health.svg'"/>
+                    <t t-set="title">Health</t>
+                    <t t-set="url" t-value="'/my/appointments'"/>
+                    <t t-set="text">Manage your appointments and prescriptions.</t>
+                    <t t-set="config_card" t-value="True"/>
+                </t>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- <template id="mini_clinic.portal_my_home" inherit_id="portal.portal_my_home">
+        <xpath expr="//*[hasclass(&apos;o_portal_my_home&apos;)]" position="before">
+            <a href="/my/appointments" class="text-decoration-none">
+                <div class="card text-center my-4 shadow-sm" style="width: 18rem; margin: 0 auto; cursor: pointer;">
+                    <div class="card-body">
+                        <h5 class="card-title">Health</h5>
+                        <p class="card-text">Manage your appointments and prescriptions.</p>
+                    </div>
+                </div>
+            </a>
+        </xpath>
+    </template> -->
+    
+    <!-- Prescription list template -->
+    <template id="portal_appointment_prescriptions" name="Appointment Prescription List">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0">My Prescriptions</h4>
+                                <div>
+                                    <a href="/my/appointments/request" class="btn btn-sm btn-outline-secondary">
+                                        <i class="fa fa-plus" style="font-size:16px;"></i>
+                                    </a>
+                                    <a href="/my/appointments/requests" class="btn btn-sm btn-outline-secondary ml-3">
+                                        <i class="fa fa-list" style="font-size:16px;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    <t t-foreach="prescriptions" t-as="prescription">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <strong>Prescription ID:</strong>
+                                                <t t-esc="prescription.name"/>
+                                                <br/>
+                                            </div>
+                                            <div>
+                                                <strong>Date:</strong>
+                                                <t t-esc="prescription.prescription_date"/>
+                                                <br/>
+                                            </div>
+                                            <div>
+                                                <strong>Doctor:</strong>
+                                                <t t-esc="prescription.doctor_id.name"/>
+                                                <br/>
+                                            </div>
+                                            <div>
+                                                <a t-attf-href="/report/pdf/mini_clinic.report_prescription_order_template/#{prescription.id}" target="_blank" class="btn btn-sm btn-primary">Print</a>
+                                            </div>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    
+    <!-- Template to request new appointment -->
+    <template id="portal_request_appointment" name="Request Appointment">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-primary text-white d-flex align-items-center">
+                                <a href="/my/appointments" class="btn btn-secondary btn-sm">
+                                    <i class="fa fa-arrow-left" style="font-size: 18px;"></i>
+                                </a>
+                                <div class="flex-grow-1 text-center">
+                                    <h4 class="mb-0">Request New Appointment</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form action="/my/appointments/request" method="POST">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/><!-- Doctor Selection -->
+                                    <div class="mb-3">
+                                        <label for="doctor_id" class="form-label">Select Doctor</label>
+                                        <select name="doctor_id" id="doctor_id" class="form-control">
+                                            <t t-foreach="doctors" t-as="doctor">
+                                                <option t-att-value="doctor.id" t-att-selected="doctor.id == selected_doctor">
+                                                    <t t-esc="doctor.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="slot_id" class="form-label">Select Slot</label>
+                                        <select name="slot_id" id="slot_id" class="form-control"><!-- <option value="">Select a doctor first</option>
+                                            <t t-foreach="slots" t-as="slot">
+                                                <option t-att-value="slot.id" t-att-selected="slot.id == selected_slot">
+                                                    <t t-esc="slot.name"/>
+                                                </option>
+                                            </t> --></select>
+                                    </div><!-- Urgency Level -->
+                                    <div class="mb-3">
+                                        <label for="urgency_level" class="form-label">Urgency Level</label>
+                                        <select name="urgency_level" id="urgency_level" class="form-control">
+                                            <option value="normal">Normal</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="high">High</option>
+                                        </select>
+                                    </div><!-- Chief Complaint -->
+                                    <div class="mb-3">
+                                        <label for="chief_complaint" class="form-label">Chief Complaint</label>
+                                        <textarea name="chief_complaint" id="chief_complaint" class="form-control" rows="3"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Submit Request</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    
+    <!-- Template to display requested appointments -->
+    <template id="portal_requested_appointments" name="Requested Appointments">
+        <t t-call="website.layout">
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-primary text-white d-flex align-items-center">
+                                <a href="/my/appointments" class="btn btn-secondary btn-sm"><!-- Add btn-sm for smaller button -->
+                                    <i class="fa fa-arrow-left" style="font-size: 18px;"></i><!-- Adjust icon size -->
+                                </a>
+                                <div class="flex-grow-1 text-center">
+                                    <h4 class="mb-0">My Requested Appointments</h4>
+                                </div>
+                                <a href="/my/appointments/request" class="btn btn-secondary btn-sm"><!-- Add btn-sm for smaller button -->
+                                    <i class="fa fa-plus" style="font-size: 18px;"></i><!-- Adjust icon size -->
+                                </a>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    <t t-foreach="appointments" t-as="appointment">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <strong>Appointment Name:</strong>
+                                                <t t-esc="appointment.name"/>
+                                                <br/>
+                                                <strong>Slot:</strong>
+                                                <t t-esc="appointment.slot_line_id.name"/>
+                                            </div>
+                                            <div>
+                                                <strong>Status:</strong>
+                                                <t t-esc="appointment.state"/>
+                                            </div>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    
+    <!-- website menu -->
+    <record id="menu_health_plus" model="website.menu">
+        <field name="name">Health</field>
+        <field name="url">/my/appointments</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">50</field>
+    </record>
+
+</odoo>

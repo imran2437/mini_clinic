@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data><!-- tree view for SeAppoinement -->
+    <record id="view_se_appointment_tree" model="ir.ui.view">
+      <field name="name">se.health.appointment.tree</field>
+      <field name="model">se.health.appoinement</field>
+      <field name="arch" type="xml">
+        <tree string="Appointments">
+          <field name="name"/>
+          <field name="patient_id"/>
+          <field name="doctor_id"/><!-- <field name="appointment_from"/> -->
+          <field name="state"/>
+        </tree>
+      </field>
+    </record><!-- Form View for SeAppoinement -->
+    <record id="view_se_appointment_form" model="ir.ui.view">
+      <field name="name">se.health.appointment.form</field>
+      <field name="model">se.health.appoinement</field>
+      <field name="arch" type="xml">
+        <form string="Appointment">
+          <header><!-- confirm buttton -->
+            <button name="action_confirm" type="object" string="Confirm" class="btn btn-success" icon="fa-check" invisible="state != &apos;draft&apos;"/>
+            <button name="action_create_invoice" type="object" string="Create Invoice" class="btn btn-primary" icon="fa-check-square" invisible="state in (&apos;done&apos;)"/>
+            <button name="action_start_consultation" type="object" string="Start Consultation" class="btn btn-info" icon="fa-stethoscope" invisible="state != &apos;waiting&apos;"/>
+            <button name="action_pause_consultation" type="object" string="Pause Consultation" class="btn btn-warning" icon="fa-pause" invisible="state != &apos;in_consultation&apos;"/>
+            <button name="button_prescription_order" type="object" string="Create Prescription" class="btn btn-primary" icon="fa-file-text" invisible="state != &apos;in_consultation&apos;"/>
+            <button name="action_cancel" type="object" string="Cancel Appointment" class="btn btn-danger" icon="fa-times" invisible="state in (&apos;done&apos;, &apos;cancel&apos;)"/>
+            <button name="action_waiting" type="object" string="Set to Waiting" class="btn btn-warning" icon="fa-hourglass-half" invisible="state != &apos;confirm&apos;"/>
+            <button name="action_resume_consultation" type="object" string="Resume Consultation" class="btn btn-success" icon="fa-play" invisible="state != &apos;pause&apos;"/>
+            <button name="action_done_consultation" type="object" string="Mark Consultation as Done" class="btn btn-success" icon="fa-check-circle" invisible="state != &apos;in_consultation&apos;"/>
+            <field name="state" widget="statusbar" statusbar_visible="draft,confirm,waiting,in_consultation,pause,done"/>
+          </header>
+          <sheet>
+            <widget name="web_ribbon" title="Paused" bg_color="bg-muted" invisible="state != &apos;pause&apos;"/>
+            <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active == True"/>
+            <div class="oe_button_box" name="button_box">
+              <button type="object" name="toggle_active" class="oe_stat_button" icon="fa-archive">
+                <field name="active" widget="boolean_button" options="{&apos;terminology&apos;:&apos;archive&apos;}" invisible="1"/>
+                <span name="active" class="o_stat_text text-success" invisible="active == False">Active</span>
+                <span name="active" class="o_stat_text text-danger" invisible="active == True">Deactive</span>
+              </button>
+              <button type="object" name="action_view_prescriptions" class="oe_stat_button" icon="fa-file-text">
+                <span class="o_stat_text">Prescriptions</span>
+              </button>
+              <button type="object" name="action_view_invoices" class="oe_stat_button" icon="fa-money">
+                <span class="o_stat_text">View Invoices</span>
+              </button>
+            </div><!-- Header Information -->
+            <div class="oe_title">
+              <h1>
+                <field name="name"/>
+              </h1>
+            </div>
+            <group>
+              <group>
+                <field name="patient_type" widget="radio" options="{&apos;horizontal&apos;: true}"/>
+                <field name="patient_id" options="{&apos;no_quick_create&apos;:True, &apos;no_create_edit&apos;:True, &apos;no_create&apos;:True}"/>
+                <field name="dob"/>
+                <field name="patient_age"/>
+                <field name="doctor_id" options="{&apos;no_quick_create&apos;:True, &apos;no_create_edit&apos;:True, &apos;no_create&apos;:True}"/>
+              </group>
+              <group>
+                <field name="date"/>
+                <field name="slot_line_id" options="{&apos;no_quick_create&apos;:True, &apos;no_create_edit&apos;:True, &apos;no_create&apos;:True}"/>
+                <field name="cabin_id" options="{&apos;no_quick_create&apos;:True, &apos;no_create_edit&apos;:True, &apos;no_create&apos;:True}"/>
+                <field name="urgency_level" widget="priority" />
+                <field name="video_call_url"/>
+              </group>
+            </group><!-- Notebook Tabs -->
+            <notebook><!-- Clinical Assessment Tab -->
+              <page string="Clinical Assessment" name="clinical_ass">
+                <div>
+                  <div>NOTE: Details are shown based on Patient Evaluation.
+                    <div>
+                      <button name="action_create_evaluation" type="object" string="Create Evaluation" class="oe_link"/>
+                    </div>
+                  </div>
+                </div>
+                <br/><!-- Group for displaying clinical assessment fields -->
+                <group>
+                  <group name="bmi" string="BMI calculation">
+                    <field name="weight"/>
+                    <field name="height"/>
+                    <field name="bmi"/>
+                    <field name="bmi_state"/>
+                  </group>
+                  <group name="assenment" string="Health Info">
+                    <field name="temperature"/>
+                    <field name="pulse"/>
+                    <label string="Systolic/Diastolic BP" for="systolic_bp"/>
+                    <div name="systolic_bp">
+                      <div class="oe_inline" style="display: inline;">
+                        <field name="systolic_bp" class="oe_inline"/>/<field name="diastolic_bp" class="oe_inline"/>
+                      </div>
+                    </div>
+                    <field name="blood_group"/>
+                  </group>
+                </group>
+                
+              </page>
+
+              <!-- history tab -->
+              <page name="history" string="History">
+                <group name="chief_complaint" string="Chief Complaint">
+                  <field name="chief_complaint" colspan="2"/>
+                </group>
+                <group name="history_of_present_illness" string="History of present illness">
+                  <field name="history_of_present_illness" colspan="2"/>
+                </group>
+                <group name="past_history" string="Past History">
+                  <field name="past_history" colspan="2"/>
+                </group>
+              </page>
+
+              <!-- note tab -->
+              <page name="name" string="Note">
+                <field name="note"/>
+              </page>
+            </notebook>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+            <field name="activity_ids" widget="mail_activity"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record><!-- search view -->
+    <record id="view_search_health_appointment" model="ir.ui.view">
+      <field name="name">se.health.appoinement.search</field>
+      <field name="model">se.health.appoinement</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="state"/>
+          <field name="doctor_id"/>
+          <field name="patient_id"/>
+          <filter string="Draft" name="state_draft" domain="[(&apos;state&apos;, &apos;=&apos;, &apos;draft&apos;)]"/>
+          <filter string="Today&apos;s Appointments" name="today" domain="[(&apos;date&apos;, &apos;&gt;=&apos;, context_today())]"/>
+          <group expand="0" string="Group By">
+            <filter string="Doctor" name="group_by_doctor" context="{&apos;group_by&apos;:&apos;doctor_id&apos;}"/>
+            <filter string="Patient" name="group_by_patient" context="{&apos;group_by&apos;:&apos;patient_id&apos;}"/>
+          </group>
+        </search>
+      </field>
+    </record><!-- Action to Open Appointments -->
+    <record id="action_se_appointment" model="ir.actions.act_window">
+      <field name="name">Appointments</field>
+      <field name="res_model">se.health.appoinement</field>
+      <field name="view_mode">tree,form</field>
+      <field name="search_view_id" ref="view_search_health_appointment"/>
+      <field name="context">{&apos;search_default_state_draft&apos;:1,&apos;search_default_today&apos;:1}</field>
+      <field name="help" type="html">
+        <p class="oe_view_nocontent_create">
+              Click to create a new Appointment.
+          </p>
+      </field>
+    </record>
+    
+    <!-- form view for evaluation -->
+    <record id="view_patient_evaluation_form" model="ir.ui.view">
+      <field name="name">se.patient.evaluation.form</field>
+      <field name="model">se.patient.evaluation</field>
+      <field name="arch" type="xml">
+        <form string="Patient Evaluation">
+          <group>
+            <group>
+              <!-- <field name="name"/> -->
+              <label string="Systolic/Diastolic BP" for="systolic_bp"/>
+              <div name="systolic_bp">
+                <div class="oe_inline" style="display: inline;">
+                  <field name="systolic_bp" class="oe_inline"/>/<field name="diastolic_bp" class="oe_inline"/>
+                </div>
+              </div>
+              <field name="temperature"/>
+              <field name="pulse"/>
+            </group>
+            <group>           
+              <field name="weight"/>
+              <field name="height"/>
+              <field name="bmi"/>
+              <field name="bmi_state"/>
+            </group>
+          </group>
+        </form>
+      </field>
+    </record>
+    <record id="action_patient_evaluation_form" model="ir.actions.act_window">
+      <field name="name">Patient Evaluation</field>
+      <field name="res_model">se.patient.evaluation</field>
+      <field name="view_mode">form</field>
+      <field name="view_id" ref="view_patient_evaluation_form"/>
+      <field name="target">new</field>
+    </record>
+  </data>
+</odoo>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_partner_health_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.health.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name=&apos;button_box&apos;]" position="inside"><!-- Button to view the appointments for this partner -->
+                <button name="action_view_appointment" type="object" class="oe_stat_button" icon="fa-calendar-check-o">
+                    <field name="appointment_count" widget="statinfo" string="Appointments"/>
+                </button><!-- Button to view the prescriptions for this partner -->
+                <button name="action_view_prescription" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                    <field name="prescription_count" widget="statinfo" string="Prescriptions"/>
+                </button>
+            </xpath>
+            <xpath expr="//page[@name=&apos;internal_notes&apos;]" position="before">
+                <page name="smart_edu_health" string="Health">
+                    <group>
+                        <group>
+                            <field name="doctor_degree"/>
+                            <field name="doctor_specialization"/>
+                            <field name="bmdc_no"/>
+                            <field name="blood_group"/>
+                            <field name="signature"/>
+                        </group>
+                        <group>
+                            <field name="weight"/>
+                            <field name="height"/>
+                            <field name="gender"/>
+                            <field name="date_of_birth"/>
+                            <field name="doc_dept_id"/>
+                            
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

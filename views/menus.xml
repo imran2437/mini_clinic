@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_mini_clinic_root" name="Smart Health" sequence="1" 
+        web_icon="mini_clinic/static,description/icon.png"/>
+        
+        
+        <!-- Menu Item for Dashboard -->
+        <menuitem id="menu_meeting_room_dashboard" name="Dashboard" parent="menu_mini_clinic_root" action="action_dashboard" sequence="1"/>
+
+        
+        <!-- Patients Menu -->
+        <record id="view_res_partner_search" model="ir.ui.view">
+            <field name="name">res.partner.search</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+        
+                    <!-- Filter for partner_type -->
+                    <filter string="Students" name="partner_type" domain="[(&apos;partner_type&apos;, &apos;=&apos;, &apos;student&apos;)]"/>
+                </search>
+            </field>
+        </record>
+        
+        <record id="action_mini_clinic_patients" model="ir.actions.act_window">
+            <field name="name">Patients</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="domain">[('partner_type', 'in', ['student', 'parent', 'staff', 'faculty','other'])]</field>
+            <field name="context">{'search_default_partner_type': 'student'}</field>
+        </record>
+        
+        <menuitem id="menu_mini_clinic_patient" name="Patients" parent="menu_mini_clinic_root" action="mini_clinic.action_mini_clinic_patients" sequence="2"/>
+        
+        <!-- appoinment menu -->
+        <menuitem id="menu_mini_clinic_appointment_main" name="Appointments" parent="menu_mini_clinic_root" action="action_se_appointment" sequence="3"/>
+        
+        <!-- doctors menu -->
+        <record id="action_mini_clinic_doctors" model="ir.actions.act_window">
+            <field name="name">Doctors</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="domain">[('partner_type', '=', 'doctor')]</field>
+            <field name="context">{'default_partner_type': 'doctor'}</field>
+        </record>
+        
+        <menuitem id="menu_mini_clinic_doctor" name="Doctors" parent="menu_mini_clinic_root" action="action_mini_clinic_doctors" sequence="4"/>
+        
+        
+        
+        <!-- prescription menu -->
+        <menuitem id="menu_mini_clinic_prescription_main" name="Prescriptions" parent="menu_mini_clinic_root" action="action_se_prescription_order" sequence="5"/>
+
+
+        <!-- medicine menu -->
+        <menuitem id="menu_mini_clinic_medicine" name="Medicine" parent="menu_mini_clinic_root" action="product_template_action_medicines" sequence="6"/>
+
+
+        <!-- Search view for Invoices related to Payment Collection -->
+        <record id="view_account_move_search_payment_collection" model="ir.ui.view">
+            <field name="name">account.move.search.payment.collection</field>
+            <field name="model">account.move</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="invoice_date"/>
+                    <field name="partner_id"/>
+                    <field name="payment_state"/>
+                    <!-- Filter for unpaid invoices -->
+                    <filter string="Unpaid" name="payment_state_not_paid" domain="[('payment_state', '=', 'not_paid')]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action for Payment Collection Invoices -->
+        <record id="action_payment_collection_invoices" model="ir.actions.act_window">
+            <field name="name">Payment Collection</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[
+                ('move_type', '=', 'out_invoice'),
+                ('invoice_line_ids.product_id.name', '=', 'Health Appointment Fees')
+            ]</field>
+            <field name="search_view_id" ref="view_account_move_search_payment_collection"/>
+            <field name="context">
+                {"search_default_payment_state_not_paid": 1}
+            </field>
+        </record>
+
+        <!-- Menu Item for Payment Collection -->
+        <menuitem id="menu_payment_collection_invoices" name="Payment Collection"
+                  parent="mini_clinic.menu_mini_clinic_root"
+                  action="action_payment_collection_invoices"
+                  sequence="7"/>
+    
+        <!-- configuration menu -->
+        <menuitem id="menu_mini_clinic_configuration" name="Configuration" parent="menu_mini_clinic_root" sequence="10"/>
+        <menuitem id="menu_mini_clinic_disease" name="Disease" parent="menu_mini_clinic_configuration" action="action_se_prescription_disease" sequence="8"/>
+
+
+        <!-- department menu -->
+        <menuitem id="menu_se_health_doc_departments" name="Departments" parent="menu_mini_clinic_configuration" action="action_se_health_doc_departments" sequence="9"/>
+        
+        <!-- appoinment menu -->
+
+        <menuitem id="menu_se_appointment" name="Appointment"  parent="menu_mini_clinic_configuration" />
+
+        <menuitem id="menu_se_appointment_schedules" name="Appointment Schedules"  parent="menu_se_appointment" action="action_se_appoinement_schedules"/>
+
+        <!-- Menu Item for Appointment Slots -->
+        <menuitem id="menu_se_appointment_slots" name="Appointment Slots" parent="menu_se_appointment" action="action_se_appointment_slots"/>
+
+
+
+        <!-- prescription -->
+        <menuitem id="menu_mini_clinic_prescription" name="Prescription" parent="menu_mini_clinic_configuration"  sequence="11"/>
+
+
+        <menuitem id="menu_mini_clinic_prescription_diagonosis" name="Diagonosis" parent="menu_mini_clinic_prescription" action="action_prescription_diagnosis" sequence="15"/>
+
+        <menuitem id="menu_mini_clinic_prescription_plan" name="Plan" parent="menu_mini_clinic_prescription" action="action_prescription_plan" sequence="17"/>
+
+        <menuitem id="menu_mini_clinic_prescription_suggestions" name="Prescription Suggestion" parent="menu_mini_clinic_prescription" action="action_prescription_suggestions" sequence="19"/>
+        
+        
+        <!-- lab test menu -->
+        <menuitem id="menu_mini_clinic_prescription_lab_test" name="Lab Test" parent="menu_mini_clinic_configuration" action="action_prescription_lab_test" sequence="21"/>
+
+        <!-- prescription template menu -->
+        <menuitem id="menu_mini_clinic_prescription_template" name="Prescription Template" parent="menu_mini_clinic_prescription" action="action_se_prescription_template" sequence="23"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo><!-- Tree View for Appointment Slots -->
+    <record id="view_se_appointment_slots_tree" model="ir.ui.view">
+        <field name="name">se.appointment.slots.tree</field>
+        <field name="model">se.appointment.slots</field>
+        <field name="arch" type="xml">
+            <tree string="Appointment Slots">
+                <field name="name"/>
+                <field name="doctor_id"/>
+                <field name="duration_per_slot"/>
+            </tree>
+        </field>
+    </record><!-- Form View for Appointment Slots --><!-- <record id="view_se_appointment_slots_form" model="ir.ui.view">
+        <field name="name">se.appointment.slots.form</field>
+        <field name="model">se.appointment.slots</field>
+        <field name="arch" type="xml">
+            <form string="Appointment Slot">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="doctor_id"/>
+                            <field name="date"/>
+                            <field name="duration_per_slot"/>
+                        </group>
+                        <group>
+                            <field name="work_from"/>
+                            <field name="work_to"/>
+                            <button name="generate_slots" string="Create Slot Lines" type="object" class="oe_highlight"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Slot Lines">
+                            <field name="slot_line_ids" nolabel="1">
+                                <tree editable="bottom" string="Slot Lines">
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="doctor_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record> -->
+    <record id="view_se_appointment_slots_form" model="ir.ui.view">
+        <field name="name">se.appointment.slots.form</field>
+        <field name="model">se.appointment.slots</field>
+        <field name="arch" type="xml">
+            <form string="Appointment Slot">
+                <sheet><!-- Main Information -->
+                    <group>
+                        <group>
+                            <field name="doctor_id" string="Doctor" widget="many2one" placeholder="Select Doctor" class="oe_inline"/>
+                            <field name="date" string="Slot From" widget="date" class="oe_inline"/>
+                            <field name="slot_to_date" class="oe_inline" />
+                            <field name="duration_per_slot" string="Slot Duration (minutes)" class="oe_inline" placeholder="Enter Duration"/>
+                            
+                        </group>
+                        <group>
+                            <!-- Updated work_from and work_to fields to use float_time widget -->
+                            <field name="work_from" string="Work From (Time)" widget="float_time" class="oe_inline" placeholder="Start Time"/>
+                            <field name="work_to" string="Work To (Time)" widget="float_time" class="oe_inline" placeholder="End Time"/>
+                            
+                            <!-- Styling the button as a paragraph with a small plus sign -->
+                            <div class="d-flex align-items-center mt-3">
+                                <button name="generate_slots" type="object" class="btn btn-link p-0 ml-4" style="font-size: 1.5em;">
+                                    <i class="fa fa-plus-circle text-danger"></i> Generate
+                                </button>
+                            </div>
+                        </group>
+                        
+                        
+                    </group><!-- Divider for Visual Clarity -->
+                    <div class="mt16 mb16">
+                        <hr/>
+                    </div><!-- Slot Lines Tab -->
+                    <notebook>
+                        <page string="Slot Lines">
+                            <field name="slot_line_ids" nolabel="1">
+                                <tree editable="bottom" string="Slot Lines">
+                                    <field name="name" string="Slot Name" placeholder="Auto-generated Name"/>
+                                    <field name="date" string="Date" widget="date" placeholder="Slot Date"/>
+                                    <field name="doctor_id" string="Doctor"/><!-- Uncomment the field below if needed --><!-- <field name="cabin_id" string="Cabin" placeholder="Select Cabin"/> -->
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record><!-- Tree View for Appointment Slot Lines -->
+    <record id="view_se_appointment_slots_line_tree" model="ir.ui.view">
+        <field name="name">se.appointment.slots.line.tree</field>
+        <field name="model">se.appointment.slots.line</field>
+        <field name="arch" type="xml">
+            <tree string="Appointment Slot Lines">
+                <field name="slot_id"/>
+                <field name="is_available"/>
+                <field name="cabin_id"/>
+            </tree>
+        </field>
+    </record><!-- Form View for Appointment Slot Lines -->
+    <record id="view_se_appointment_slots_line_form" model="ir.ui.view">
+        <field name="name">se.appointment.slots.line.form</field>
+        <field name="model">se.appointment.slots.line</field>
+        <field name="arch" type="xml">
+            <form string="Appointment Slot Line">
+                <sheet>
+                    <group>
+                        <field name="slot_id"/>
+                        <field name="is_available"/>
+                        <field name="cabin_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record><!-- Action for Appointment Slots -->
+    <record id="action_se_appointment_slots" model="ir.actions.act_window">
+        <field name="name">Appointment Slots</field>
+        <field name="res_model">se.appointment.slots</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

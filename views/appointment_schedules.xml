@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    
+    <!-- Tree View for Appointment Schedules -->
+    <record id="view_se_appoinement_schedules_tree" model="ir.ui.view">
+        <field name="name">se.appoinement.schedules.tree</field>
+        <field name="model">se.appoinement.schedules</field>
+        <field name="arch" type="xml">
+            <tree string="Appointment Schedules">
+                <field name="name"/>
+                <field name="doctor_id"/>
+                <field name="timezone"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Appointment Schedules -->
+    <record id="view_se_appoinement_schedules_form" model="ir.ui.view">
+        <field name="name">se.appoinement.schedules.form</field>
+        <field name="model">se.appoinement.schedules</field>
+        <field name="arch" type="xml">
+            <form string="Appointment Schedule">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="doctor_id"/>
+                        <field name="timezone"/>
+                        <field name="active"/>
+                    </group>
+                    <notebook>
+                        <page string="Schedule Lines">
+                            <field name="schedule_line_ids">
+                                <tree string="Schedule Lines">
+                                    <field name="name"/>
+                                    <field name="day"/>
+                                    <field name="work_from"/>
+                                    <field name="work_to"/>
+                                    <field name="workin_hours"/>
+                                    <field name="is_active"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for Appointment Schedule Lines -->
+    <record id="view_se_appoinement_schedules_line_tree" model="ir.ui.view">
+        <field name="name">se.appoinement.schedules.line.tree</field>
+        <field name="model">se.appoinement.schedules.line</field>
+        <field name="arch" type="xml">
+            <tree string="Appointment Schedule Lines">
+                <field name="name"/>
+                <field name="day"/>
+                <field name="work_from"/>
+                <field name="work_to"/>
+                <field name="workin_hours"/>
+                <field name="is_active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Appointment Schedule Lines -->
+    <record id="view_se_appoinement_schedules_line_form" model="ir.ui.view">
+        <field name="name">se.appoinement.schedules.line.form</field>
+        <field name="model">se.appoinement.schedules.line</field>
+        <field name="arch" type="xml">
+            <form string="Appointment Schedule Line">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="schedule_id"/>
+                        <field name="day"/>
+                        <field name="work_from"/>
+                        <field name="work_to"/>
+                        <field name="workin_hours"/>
+                        <field name="is_active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Appointment Schedules -->
+    <record id="action_se_appoinement_schedules" model="ir.actions.act_window">
+        <field name="name">Appointment Schedules</field>
+        <field name="res_model">se.appoinement.schedules</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+        
+
+</odoo>

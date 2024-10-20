@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="se_appointment" model="ir.sequence">
+            <field name="name">Appointment</field>
+            <field name="code">se.health.appoinement</field>
+            <field name="prefix">AP</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <!-- se.patient.evaluation -->
+        <record id="se_patient_evaluation_seq" model="ir.sequence">
+            <field name="name">Patient Evaluation</field>
+            <field name="code">se.patient.evaluation</field>
+            <field name="prefix">PE</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="se_prescription_order_sequence" model="ir.sequence">
+            <field name="name">Prescription</field>
+            <field name="code">se.prescription.order</field>
+            <field name="prefix">PR</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="view_se_prescription_disease_tree" model="ir.ui.view">
+    <field name="name">se.prescription.disease.tree</field>
+    <field name="model">se.prescription.disease</field>
+    <field name="arch" type="xml">
+      <tree string="Prescription Diseases">
+        <field name="name"/>
+        <field name="code"/>
+        <field name="clasification"/>
+        <field name="catagory"/>
+        <field name="is_active"/>
+      </tree>
+    </field>
+  </record>
+  <record id="view_se_prescription_disease_form" model="ir.ui.view">
+    <field name="name">se.prescription.disease.form</field>
+    <field name="model">se.prescription.disease</field>
+    <field name="arch" type="xml">
+      <form string="Prescription Disease">
+        <sheet>
+          <group>
+            <group>
+              <field name="name"/>
+              <field name="code"/>
+              <field name="is_active"/>
+            </group>
+            <group>
+              <field name="clasification"/>
+              <field name="catagory"/>
+            </group>
+          </group>
+          <group>
+            <field name="description"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+  <record id="action_se_prescription_disease" model="ir.actions.act_window">
+    <field name="name">Prescription Diseases</field>
+    <field name="res_model">se.prescription.disease</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+              Create the first Prescription Disease
+          </p>
+    </field>
+  </record>
+</odoo>

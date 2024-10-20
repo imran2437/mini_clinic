@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_prescription_order_template">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2>Prescription Report</h2>
+                <p>
+                    <strong>Patient:</strong>
+                    <t t-esc="doc.patient_id.name"/>
+                </p>
+                <p>
+                    <strong>Doctor:</strong>
+                    <t t-esc="doc.doctor_id.name"/>
+                </p>
+                <p>
+                    <strong>Date:</strong>
+                    <t t-esc="doc.prescription_date"/>
+                </p>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>Medicine</th>
+                            <th>Quantity</th>
+                            <th>Dosage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="doc.medicine" t-as="line">
+                            <tr>
+                                <td>
+                                    <t t-esc="line.product_id.name"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line.quantity"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line.dose"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

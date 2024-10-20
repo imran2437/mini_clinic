@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <!-- tree view -->
+    <record id="view_se_prescription_order_tree" model="ir.ui.view">
+      <field name="name">se.prescription.order.tree</field>
+      <field name="model">se.prescription.order</field>
+      <field name="arch" type="xml">
+        <tree string="Prescriptions">
+          <field name="appointment_id"/>
+          <field name="name"/>
+          <field name="patient_id"/>
+          <field name="doctor_id"/>
+          <field name="prescription_date"/>
+          <field name="next_followup_date"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- form view -->
+    <record id="view_se_prescription_order_form" model="ir.ui.view">
+      <field name="name">se.prescription.order.form</field>
+      <field name="model">se.prescription.order</field>
+      <field name="arch" type="xml">
+        <form string="Prescription Order">
+          <header>
+            <!-- <button name="action_create_invoice" type="object" string="Create Invoice" class="oe_highlight" icon="fa-check-square"/> -->
+            <button name="action_confirm" type="object" string="Confirm" class="oe_highlight" icon="fa-check" invisible="state != &apos;draft&apos;"/>
+            <button name="action_send_email" type="object" string="Send by Email" class="oe_highlight" icon="fa-envelope" invisible="state in (&apos;draft&apos;,&apos;sent&apos;)"/>
+            <button string="Print" type="action" name="%(action_report_prescription_order)d" class="oe_highlight" invisible="state in (&apos;draft&apos;)"/>
+            <button name="action_reset_to_draft" type="object" string="Reset to Draft" icon="fa-undo" invisible="state in (&apos;draft&apos;)"/>
+            <field name="state" widget="statusbar" statusbar_visible="draft,sent,confirmed"/>
+          </header>
+          <sheet>
+            <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active == True"/>
+            <div class="oe_button_box" name="button_box">
+              <button type="object" name="toggle_active" class="oe_stat_button" icon="fa-archive">
+                <field name="active" widget="boolean_button" options="{&apos;terminology&apos;:&apos;archive&apos;}" invisible="1"/>
+                <span name="active" class="o_stat_text text-success" invisible="active == False">Active</span>
+                <span name="active" class="o_stat_text text-danger" invisible="active == True">Deactive</span>
+              </button>
+            </div>
+            <div class="oe_title">
+              <h1>
+                <field name="appointment_id"/>
+              </h1>
+            </div>
+            <group>
+              <group>
+                <field name="name"/>
+              <field name="patient_id"/>
+              <field name="patient_age"/>
+                <field name="doctor_id"/>
+                <field name="prescription_template_id" widget="many2one" options="{'no_create': True}" />
+              </group>
+              <group>
+                <field name="prescription_disease" widget="many2many_tags"/>
+                <field name="prescription_date"/>
+                <field name="next_followup_date"/>
+                <field name="last_prescription_id"/>
+                
+              </group>
+            </group>
+            <notebook>
+              <page string="Prescription Lines">
+                <field name="medicine" nolabel="1">
+                  <tree string="Line" editable="bottom">
+                    <field name="product_id"/>
+                    <!-- <field name="qty_available"/> -->
+                    <field name="dose"/>
+                    <field name="days"/>
+                    <field name="days_in_bangla"/>
+                    <field name="qty_per_day"/>
+                    <field name="dose_suggestions"/>
+                    <field name="coment"/>
+                  </tree>
+                </field>
+              </page>
+              <!-- lab test -->
+              <page string="Lab Test">
+                <field name="lab_test_ids" nolabel="1">
+                  <tree string="Line" editable="bottom">
+                    <field name="name"/>
+                  </tree>
+                </field>
+              </page>
+              <page string="Instructions">
+                <field name="prescription_suggestions">
+                  <tree string="Suggestions">
+                    <field name="name"/>
+                  </tree>
+                </field>
+              </page>
+              <page string="Diagnosis">
+                <field name="prescription_diagnosis">
+                  <tree string="Diagnosis">
+                    <field name="name"/>
+                  </tree>
+                </field>
+              </page>
+              <page string="Plan">
+                <field name="prescription_plan">
+                  <tree string="Plan">
+                    <field name="name"/>
+                  </tree>
+                </field>
+              </page>
+            </notebook>
+            <group>
+              <field name="note"/>
+            </group>
+            <div class="oe_chatter">
+              <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+              <field name="activity_ids" widget="mail_activity"/>
+              <field name="message_ids" widget="mail_thread"/>
+            </div>
+          </sheet>
+        </form>
+      </field>
+    </record>
+    
+    <!-- prescription search view -->
+    <record id="view_search_prescription_order" model="ir.ui.view">
+      <field name="name">se.prescription.order.search</field>
+      <field name="model">se.prescription.order</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="state"/>
+          <field name="doctor_id"/>
+          <field name="patient_id"/>
+          <field name="prescription_date"/>
+          <filter string="Draft" name="state_draft" domain="[(&apos;state&apos;, &apos;=&apos;, &apos;draft&apos;)]"/>
+          <filter string="Today&apos;s Prescriptions" name="today" domain="[(&apos;prescription_date&apos;, &apos;=&apos;, context_today())]"/>
+          <group expand="0" string="Group By">
+            <filter string="Doctor" name="group_by_doctor" context="{&apos;group_by&apos;: &apos;doctor_id&apos;}"/>
+            <filter string="Patient" name="group_by_patient" context="{&apos;group_by&apos;: &apos;patient_id&apos;}"/>
+          </group>
+        </search>
+      </field>
+    </record>
+
+
+    <!-- action for prescription order -->
+    <record id="action_se_prescription_order" model="ir.actions.act_window">
+      <field name="name">Prescription Orders</field>
+      <field name="res_model">se.prescription.order</field>
+      <field name="view_mode">tree,form</field>
+      <field name="search_view_id" ref="view_search_prescription_order"/>
+      <field name="context">{&apos;search_default_state_draft&apos;: 1, &apos;search_default_today&apos;: 1}</field>
+      <field name="help" type="html">
+        <p class="oe_view_nocontent_create">
+              Create the first Prescription Order
+          </p>
+      </field>
+    </record>
+  </data>
+</odoo>

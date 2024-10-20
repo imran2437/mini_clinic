@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+
+        <record id="action_report_prescription_order" model="ir.actions.report">
+            <field name="name">Prescription Order</field>
+            <field name="model">se.prescription.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">mini_clinic.report_prescription_order_template</field>
+            <field name="report_file">mini_clinic.report_prescription_order_template</field>
+            <field name="binding_model_id" ref="model_se_prescription_order"/>
+            <field name="binding_type">report</field>
+        </record>
+        
+    </data>
+</odoo>

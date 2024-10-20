@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_prescription_order_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page" style="font-family: Arial, sans-serif; margin: 20px; display: flex; flex-direction: column; min-height: 100vh;">
+                    <div style="display: flex; justify-content: space-between; border-bottom: 2px solid black; padding-bottom: 10px;">
+                        <div style="width: 50%;">
+                            <h3 style="margin: 0;">
+                                <t t-esc="doc.doctor_id.name"/>
+                            </h3>
+                            <p style="margin: 0;">
+                                <t t-esc="doc.doctor_id.doctor_degree"/>
+                            </p>
+                            <p style="margin: 0;">
+                                <t t-esc="doc.doctor_id.doctor_specialization"/>
+                            </p>
+                            <p style="margin: 0;">BMDC: <t t-esc="doc.doctor_id.bmdc_no"/>
+                            </p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p style="margin: 0;">
+                                <strong>Date:</strong>
+                                <span t-field="doc.prescription_date" t-options="{&apos;widget&apos;: &apos;date&apos;, &apos;format&apos;: &apos;dd-MM-yyyy&apos;}"/>
+                            </p>
+                        </div>
+                    </div><!-- Patient Information -->
+                    <div style=" display: flex; justify-content: space-between; border-bottom: 2px solid black;">
+                        <div style="width: 50%;">
+                            <p>
+                                <strong>Prescription ID:</strong>
+                                <span t-field="doc.name"/>
+                            </p>
+                            <p>
+                                <strong>Patient Name:</strong>
+                                <span t-field="doc.patient_id.name"/>
+                            </p>
+                            <p>
+                                <strong>Age:</strong>
+                                <span t-esc="doc.appointment_id.patient_age or &apos;Unknown&apos;"/> Years</p>
+                        </div>
+                        <div style="width: 50%; text-align: right;">
+                            <p>
+                                <strong>Sex:</strong>
+                                <span>
+                                    <t t-esc="doc.patient_id.gender or &apos;Unknown&apos;"/>
+                                </span>
+                            </p>
+                            <p>
+                                <strong>Weight:</strong>
+                                <span t-esc="doc.appointment_id.weight or &apos;N/A&apos;"/> kg</p>
+                            <p>
+                                <strong>Address:</strong>
+                                <span t-esc="doc.patient_id.street or &apos;N/A&apos;"/>
+                            </p>
+                        </div>
+                    </div><!-- Diagnosis, Investigations, and Plan -->
+                    <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+                        <div style="width: 40%; padding-right: 10px;">
+                            <p>
+                                <strong>C/C:</strong>
+                                <span t-esc="doc.appointment_id.chief_complaint or &apos;N/A&apos;"/>
+                            </p>
+                            <p>
+                                <strong>O/E:</strong> Pulse: <t t-esc="doc.appointment_id.pulse or &apos;0&apos;"/> B/min, BP: <t t-esc="doc.appointment_id.systolic_bp or &apos;null&apos;"/>/<t t-esc="doc.appointment_id.diastolic_bp or &apos;null&apos;"/>
+                            </p>
+                            <p>
+                                <strong>Investigations:</strong>
+                            </p>
+                            <ul>
+                                <t t-foreach="doc.lab_test_ids" t-as="test">
+                                    <li>
+                                        <span t-field="test.name"/>
+                                    </li>
+                                </t>
+                            </ul>
+                            <p>
+                                <strong>Diagnosis:</strong>
+                            </p>
+                            <ul>
+                                <t t-foreach="doc.prescription_diagnosis" t-as="diagnosis">
+                                    <li>
+                                        <span t-field="diagnosis.name"/>
+                                    </li>
+                                </t>
+                            </ul>
+                            <p>
+                                <strong>Plan:</strong>
+                            </p>
+                            <ul>
+                                <t t-foreach="doc.prescription_plan" t-as="plan">
+                                    <li>
+                                        <span t-field="plan.name"/>
+                                    </li>
+                                </t>
+                            </ul>
+                        </div><!-- Prescription (Rx) -->
+                        <div style="width: 60%; border-left: 2px solid black; padding-left: 10px;">
+                            <h3 style="margin-bottom: 10px;">Rx</h3>
+                            <table style="width: 100%; margin-bottom: 20px;">
+                                <tbody>
+                                    <t t-foreach="doc.medicine" t-as="line">
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <span t-field="line.product_id.name"/> (Tab)</strong>
+                                            </td>
+                                            <td>
+                                                <span t-field="line.dose"/> mg</td>
+                                            <td>
+                                                <span t-field="line.qty_per_day"/>
+                                            </td>
+                                            <td>
+                                                <span>
+                                                    <t t-esc="line.days"/> Days</span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table><!-- Prescription Instructions -->
+                            <h4 style="text-decoration: underline;">Instructions:</h4>
+                            <ul>
+                                <t t-foreach="doc.prescription_suggestions" t-as="suggestion">
+                                    <li>
+                                        <span t-field="suggestion.name"/>
+                                    </li>
+                                </t>
+                            </ul>
+                            <p>
+                                <strong>Next Follow-up:</strong>
+                                <span t-field="doc.next_followup_date" t-options="{&apos;widget&apos;: &apos;date&apos;, &apos;format&apos;: &apos;dd-MM-yyyy&apos;}"/>
+                            </p>
+                        </div>
+                    </div>
+                    <footer style="margin-top: 250px;"><!-- Doctor's Signature -->
+                        <div style="text-align: right; margin-top: 25px;">
+                            <!-- <p style="width: 120px; height: 60px; object-fit margin-bottom: 0;:">
+                                <t  t-esc="doc.doctor_id.signature"/>  
+                            </p> -->
+                            <p style="margin-bottom: 0;">________________________</p>
+                            <p>
+                                <t t-esc="doc.doctor_id.name"/>
+                            </p>
+                        </div>
+                    </footer>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
